@@ -4522,17 +4522,17 @@ R9
 R48
 R1'''
 
-
+  # initialization
   start = 50
   count = 0
   currentValue = start
 
   input = HandleInput(raw)
 
-  print(currentValue)
+  # print(currentValue)
   for dial in input:
     currentValue = DoMove(currentValue, dial)
-    print(currentValue)
+    # print(currentValue)
     if (currentValue == 0) : count += 1
 
   print(f"the final count equal: {count}")
