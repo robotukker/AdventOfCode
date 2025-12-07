@@ -8,9 +8,19 @@ def DoMove(value, dial):
 def HandleInput(raw):
   return raw.strip().split()
 
+
+def CheckPass(currentValue, dial):
+  if (dial[0] == "L"  and currentValue == 0):
+    return (int(dial[1:]))//100
+  elif (dial[0] == "L"):
+    return (int(dial[1:])-currentValue+100)//100
+  elif (dial[0] == "R"):
+    return ((currentValue + int(dial[1:]))//100)
+
+
 if __name__ == "__main__":
   # input
-  raw  = '''
+  raw = '''
 R46
 L12
 R1
@@ -4531,9 +4541,8 @@ R1'''
 
   # print(currentValue)
   for dial in input:
+    count += CheckPass(currentValue, dial)
     currentValue = DoMove(currentValue, dial)
-    # print(currentValue)
-    if (currentValue == 0) : count += 1
 
   print(f"the final count equal: {count}")
 
