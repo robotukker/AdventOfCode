@@ -7,63 +7,53 @@ def FuseDigits(digitList):
 
 def PopDigit(highDigits, skip, k):
     for i in range(k):
-        if highDigits[-i] != 0:
-            skip += 1
+        skip += 1
         highDigits.pop()
 
     return highDigits,skip
 
         
-
 if __name__ == "__main__":
-        
+    # Handle input
     with open('Input3.txt', 'r') as file:
         batteryLines = file.read()
-
     lines = batteryLines.splitlines()
     sum = 0
 
-    for line in lines:
-        print(line)
-        lineQueue = deque()
-        highDigits = [0]
-        skip = 0
 
+    for line in lines:
+        #initialization
+        lineQueue = deque()
         for digit in line:
             lineQueue.append(digit)
-
         diff = len(lineQueue)-12
-        print(diff)
+
+        highDigits = [0]
+        skip = -1            # to handle initialization zero in highDigits vector
 
         while len(lineQueue) > 0:
-            if skip < diff-2 and len(highDigits) > 2 and int(lineQueue[0]) > int(highDigits[-3]):
-                highDigits,skip = PopDigit(highDigits,skip,3)
+            digitUsed = False
 
+            # Search where digit should be placed
+            for i in range(diff,0,-1):
+                if skip < diff-(i-1) and len(highDigits) > i-1 and int(lineQueue[0]) > int(highDigits[-i]):
+                    highDigits,skip = PopDigit(highDigits,skip,i)
+
+                    highDigits.append(lineQueue[0])
+                    lineQueue.popleft()
+
+                    digitUsed = True 
+                    break
+            # if no suitable loc. is found inside vector, append to end
+            if not digitUsed:
                 highDigits.append(lineQueue[0])
                 lineQueue.popleft()
 
-            elif skip < diff-1 and len(highDigits) > 2 and int(lineQueue[0]) > int(highDigits[-2]):
-                highDigits,skip = PopDigit(highDigits,skip,2)
-
-                highDigits.append(lineQueue[0])
-                lineQueue.popleft()
-
-            elif skip < diff and int(lineQueue[0]) > int(highDigits[-1]):
-                highDigits,skip = PopDigit(highDigits,skip,1)
-            
-                highDigits.append(lineQueue[0])
-                lineQueue.popleft()
-                
-            else:
-                highDigits.append(lineQueue[0])
-                lineQueue.popleft()
-
+        # Grab first 12
         highDigits = highDigits[:12]
-        print(highDigits)
+
             
         fusedDigits = FuseDigits(highDigits)
         sum += int(fusedDigits)
-
-
 
     print(sum)
